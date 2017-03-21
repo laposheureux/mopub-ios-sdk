@@ -206,7 +206,12 @@
         [self performActionForMoPubSpecificURL:URL];
         return NO;
     } else if ([self shouldIntercept:URL navigationType:navigationType]) {
-        [self interceptURL:URL];
+        if (self.userInteractedWithWebView) {
+            [self interceptURL:URL];
+        } else {
+            MPLogWarn(@"Attempted to load URL without user interaction: %@", request);
+        }
+        
         return NO;
     } else {
         // don't handle any deep links without user interaction
