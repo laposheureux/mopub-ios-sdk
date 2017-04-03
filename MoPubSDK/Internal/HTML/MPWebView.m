@@ -69,7 +69,9 @@ static NSString *const kMoPubFrameKeyPathString = @"frame";
         WKUserContentController *contentController = [[WKUserContentController alloc] init];
         WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
         config.allowsInlineMediaPlayback = kMoPubAllowsInlineMediaPlaybackDefault;
-        if ([config respondsToSelector:@selector(requiresUserActionForMediaPlayback)]) {
+        if ([config respondsToSelector:@selector(mediaTypesRequiringUserActionForPlayback)]) {
+            config.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeAudio;
+        } else if ([config respondsToSelector:@selector(requiresUserActionForMediaPlayback)]) {
             config.requiresUserActionForMediaPlayback = kMoPubRequiresUserActionForMediaPlaybackDefault;
         } else {
             config.mediaPlaybackRequiresUserAction = kMoPubRequiresUserActionForMediaPlaybackDefault;
