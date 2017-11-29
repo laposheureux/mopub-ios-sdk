@@ -99,7 +99,7 @@ static NSString * const kMraidURLScheme = @"mraid";
 
 - (void)fireSizeChangeEvent:(CGSize)size
 {
-    MPLogDebug(@"mraidbridge.notifySizeChangeEvent(%.1f, %.1f)", size.width, size.height);
+//    MPLogDebug(@"mraidbridge.notifySizeChangeEvent(%.1f, %.1f)", size.width, size.height);
     [self executeJavascript:@"window.mraidbridge.notifySizeChangeEvent(%.1f, %.1f);", size.width, size.height];
 }
 
