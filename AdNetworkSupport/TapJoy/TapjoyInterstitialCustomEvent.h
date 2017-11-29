@@ -6,8 +6,7 @@
 #endif
 
 /*
- * Certified with version 11.8.2 of the Tapjoy SDK.
+ * Certified with Tapjpy version 11.11.0
  */
-
 @interface TapjoyInterstitialCustomEvent : MPInterstitialCustomEvent
 @end

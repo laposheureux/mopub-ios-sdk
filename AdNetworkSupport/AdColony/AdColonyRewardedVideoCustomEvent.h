@@ -11,6 +11,9 @@
     #import "MPRewardedVideoCustomEvent.h"
 #endif
 
+/*
+ * Certified with AdColony 3.2.1
+ */
 @interface AdColonyRewardedVideoCustomEvent : MPRewardedVideoCustomEvent
 
 @end

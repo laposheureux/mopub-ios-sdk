@@ -11,6 +11,9 @@
     #import "MPRewardedVideoCustomEvent.h"
 #endif
 
+/*
+ * Certified with Unity Ads 2.1.1
+ */
 @interface UnityAdsRewardedVideoCustomEvent : MPRewardedVideoCustomEvent
 
 @end

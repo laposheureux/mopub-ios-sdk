@@ -11,10 +11,14 @@
 #endif
 
 #import <Foundation/Foundation.h>
+#import <MMAdSDK/MMAdSDK.h>
 
 /*
- * For MMSDK version 6.3.1
+ * Certified with Millennial Media 6.6.0
  */
 @interface MillennialNativeCustomEvent : MPNativeCustomEvent
+
+@property (nonatomic, readonly) MMCreativeInfo* creativeInfo;
+@property (nonatomic, readonly) NSString* version;
 
 @end

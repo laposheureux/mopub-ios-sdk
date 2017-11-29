@@ -5,10 +5,6 @@
 //  Copyright (c) 2016 MoPub. All rights reserved.
 //
 
-/*
- * Certified with version 3.0.5 of the AdColony SDK.
- */
-
 #import "AdColonyInterstitialCustomEvent.h"
 #import "AdColonyRewardedVideoCustomEvent.h"
 #import "AdColonyInstanceMediationSettings.h"
@@ -26,7 +22,18 @@
  *
  * @param appId The application's AdColony App ID.
  * @param allZoneIds All the possible zone IDs the application may use across all ad formats.
+ * @param userId The user ID to attribute ads/rewards.
  */
-+ (void)initializeAdColonyCustomEventWithAppId:(NSString *)appId allZoneIds:(NSArray *)allZoneIds userId:(NSString *)userId callback:(void(^)())callback;
++ (void)initializeAdColonyCustomEventWithAppId:(NSString *)appId allZoneIds:(NSArray *)allZoneIds userId:(NSString *)userId callback:(void(^)(void))callback;
+
+/*
+ * Enables test ads for your application without changing dashboard settings.
+ */
++ (void)enableClientSideTestMode;
+
+/*
+ * Disables test ads for your application without changing dashboard settings.
+ */
++ (void)disableClientSideTestMode;
 
 @end

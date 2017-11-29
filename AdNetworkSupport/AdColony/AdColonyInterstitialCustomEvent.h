@@ -11,6 +11,9 @@
     #import "MPInterstitialCustomEvent.h"
 #endif
 
+/*
+ * Certified with AdColony 3.2.1
+ */
 @interface AdColonyInterstitialCustomEvent : MPInterstitialCustomEvent
 
 @end

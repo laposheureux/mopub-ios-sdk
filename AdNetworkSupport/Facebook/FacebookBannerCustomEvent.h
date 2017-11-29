@@ -11,10 +11,9 @@
     #import "MPBannerCustomEvent.h"
 #endif
 
-/**
- * Certified with the Facebook iOS SDK version 4.15.1
+/*
+ * Certified with Facebook Audience Network 4.26
  */
-
 @interface FacebookBannerCustomEvent : MPBannerCustomEvent
 
 @end

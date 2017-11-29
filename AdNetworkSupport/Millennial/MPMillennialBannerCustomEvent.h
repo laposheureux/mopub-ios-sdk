@@ -13,9 +13,10 @@
 #import <MMAdSDK/MMAdSDK.h>
 
 /*
- * For MMSDK version 6.3.1
+ * Certified with Millennial Media 6.6.0
  */
-
 @interface MPMillennialBannerCustomEvent : MPBannerCustomEvent <MMInlineDelegate>
+
+@property (nonatomic, readonly) MMCreativeInfo* creativeInfo;
 
 @end

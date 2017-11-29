@@ -11,9 +11,12 @@
 #import "MPAdInfo.h"
 #import "MoPub.h"
 
-@interface MPRewardedVideoAdDetailViewController () <MPRewardedVideoDelegate>
+@interface MPRewardedVideoAdDetailViewController () <MPRewardedVideoDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *keywordsTextField;
+@property (weak, nonatomic) IBOutlet UITextField *customDataTextField;
+@property (weak, nonatomic) IBOutlet UIPickerView *rewardPickerView;
+@property (nonatomic, assign) NSInteger selectedRewardIndex;
 @property (nonatomic, strong) MPAdInfo *info;
 
 @end
@@ -26,11 +29,9 @@
     if (self) {
         self.info = adInfo;
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= MP_IOS_7_0
         if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
             self.edgesForExtendedLayout = UIRectEdgeNone;
         }
-#endif
     }
     return self;
 }
@@ -41,6 +42,8 @@
     self.titleLabel.text = self.info.title;
     self.IDLabel.text = self.info.ID;
     self.showButton.hidden = YES;
+    self.rewardPickerView.dataSource = self;
+    self.rewardPickerView.delegate = self;
 
     [[MoPub sharedInstance] initializeRewardedVideoWithGlobalMediationSettings:@[] delegate:self];
 
@@ -64,6 +67,8 @@
     self.didDisappearLabel.alpha = 0.1;
     self.didReceiveTapLabel.alpha = 0.1;
     self.shouldRewardLabel.alpha = 0.1;
+    self.rewardPickerView.userInteractionEnabled = false;
+    [self.rewardPickerView reloadAllComponents];
 
     self.info.keywords = self.keywordsTextField.text;
     // persist last used keywords if this is a saved ad
@@ -79,7 +84,9 @@
 - (IBAction)didTapShowButton:(id)sender
 {
     if ([MPRewardedVideo hasAdAvailableForAdUnitID:self.info.ID]) {
-        [MPRewardedVideo presentRewardedVideoAdForAdUnitID:self.info.ID fromViewController:self];
+        NSArray * rewards = [MPRewardedVideo availableRewardsForAdUnitID:self.info.ID];
+        MPRewardedVideoReward * reward = rewards[self.selectedRewardIndex];
+        [MPRewardedVideo presentRewardedVideoAdForAdUnitID:self.info.ID fromViewController:self withReward:reward customData:self.customDataTextField.text];
     }
 }
 
@@ -97,6 +104,9 @@
     [self.spinner stopAnimating];
     self.showButton.hidden = NO;
     self.loadButton.enabled = YES;
+
+    self.rewardPickerView.userInteractionEnabled = true;
+    [self.rewardPickerView reloadAllComponents];
 }
 
 - (void)rewardedVideoAdDidFailToLoadForAdUnitID:(NSString *)adUnitID error:(NSError *)error
@@ -148,6 +158,36 @@
 - (void)rewardedVideoAdShouldRewardForAdUnitID:(NSString *)adUnitID reward:(MPRewardedVideoReward *)reward
 {
     self.shouldRewardLabel.alpha = 1.0;
+}
+
+#pragma mark - UIPickerViewDataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    if (![MPRewardedVideo hasAdAvailableForAdUnitID:self.info.ID]) {
+        return 0;
+    }
+
+    NSArray * rewards = [MPRewardedVideo availableRewardsForAdUnitID:self.info.ID];
+    return rewards.count;
+}
+
+#pragma mark - UIPickerViewDelegate
+
+- (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    NSArray * rewards = [MPRewardedVideo availableRewardsForAdUnitID:self.info.ID];
+    MPRewardedVideoReward * reward = rewards[row];
+    NSString * title = [NSString stringWithFormat:@"%@ %@", reward.amount, reward.currencyType];
+    NSAttributedString * attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+
+    return attributedTitle;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    self.selectedRewardIndex = row;
 }
 
 @end
