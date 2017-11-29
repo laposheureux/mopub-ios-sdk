@@ -25,7 +25,6 @@ BOOL MPViewIsVisible(UIView *view);
 BOOL MPViewIntersectsParentWindowWithPercent(UIView *view, CGFloat percentVisible);
 NSString *MPResourcePathForResource(NSString *resourceName);
 NSArray *MPConvertStringArrayToURLArray(NSArray *strArray);
-NSBundle *MPResourceBundleForClass(Class aClass);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -64,18 +63,6 @@ enum {
     MPInterstitialOrientationTypeAll
 };
 typedef NSUInteger MPInterstitialOrientationType;
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-@interface NSString (MPAdditions)
-
-/*
- * Returns string with reserved/unsafe characters encoded.
- */
-- (NSString *)mp_URLEncodedString;
-
-@end
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

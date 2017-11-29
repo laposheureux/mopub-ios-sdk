@@ -43,11 +43,9 @@ static NSString *kDefaultCellIdentifier = @"MoPubSampleAppTableViewAdPlacerCell"
         self.adInfo = info;
         self.contentItems = [NSMutableArray array];
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= MP_IOS_7_0
         if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
             self.edgesForExtendedLayout = UIRectEdgeNone;
         }
-#endif
     }
     return self;
 }
@@ -103,6 +101,7 @@ static NSString *kDefaultCellIdentifier = @"MoPubSampleAppTableViewAdPlacerCell"
         return CGSizeMake(maximumWidth, 312.0f);
     };
     MPNativeAdRendererConfiguration *nativeAdConfig = [MPStaticNativeAdRenderer rendererConfigurationWithRendererSettings:nativeAdSettings];
+    nativeAdConfig.supportedCustomEvents = @[@"MPMoPubNativeCustomEvent", @"FlurryNativeCustomEvent"];
 
     // Native video ads. You don't need to create nativeVideoAdSettings and nativeVideoConfig unless you are using native video ads.
     MOPUBNativeVideoAdRendererSettings *nativeVideoAdSettings = [[MOPUBNativeVideoAdRendererSettings alloc] init];

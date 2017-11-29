@@ -11,10 +11,9 @@
     #import "MPNativeCustomEvent.h"
 #endif
 
-/**
- * Certified with the Facebook iOS SDK version 4.8.0
+/*
+ * Certified with Facebook Audience Network 4.26
  */
-
 @interface FacebookNativeCustomEvent : MPNativeCustomEvent
 
 

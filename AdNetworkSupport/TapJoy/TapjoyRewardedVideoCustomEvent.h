@@ -6,9 +6,8 @@
 #endif
 
 /*
- * Certified with version 11.5.1 of the Tapjoy SDK.
+ * Certified with Tapjpy version 11.11.0
  */
-
 @interface TapjoyRewardedVideoCustomEvent : MPRewardedVideoCustomEvent
 
 @end

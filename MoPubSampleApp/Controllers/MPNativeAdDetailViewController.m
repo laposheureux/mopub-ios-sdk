@@ -19,6 +19,11 @@
 #import "MOPUBNativeVideoAdRenderer.h"
 #import "MPNativeVideoView.h"
 
+#ifdef CUSTOM_EVENTS_ENABLED
+#import "FlurryNativeVideoAdRenderer.h"
+#import "MPGoogleAdMobNativeRenderer.h"
+#endif
+
 NSString *const kNativeAdDefaultActionViewKey = @"kNativeAdDefaultActionButtonKey";
 
 @interface MPNativeAdDetailViewController () <UITextFieldDelegate, MPNativeAdDelegate>
@@ -42,11 +47,9 @@ NSString *const kNativeAdDefaultActionViewKey = @"kNativeAdDefaultActionButtonKe
     if (self) {
         self.info = info;
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= MP_IOS_7_0
         if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
             self.edgesForExtendedLayout = UIRectEdgeNone;
         }
-#endif
     }
     return self;
 }
@@ -84,6 +87,7 @@ NSString *const kNativeAdDefaultActionViewKey = @"kNativeAdDefaultActionButtonKe
     settings.renderingViewClass = [MPStaticNativeAdView class];
 
     MPNativeAdRendererConfiguration *config = [MPStaticNativeAdRenderer rendererConfigurationWithRendererSettings:settings];
+    NSMutableArray * configurations = [NSMutableArray arrayWithObject:config];
 
     // Video configuration. You don't need to create nativeVideoAdSettings and nativeVideoConfig unless you are using native video ads.
     MOPUBNativeVideoAdRendererSettings *nativeVideoAdSettings = [[MOPUBNativeVideoAdRendererSettings alloc] init];
@@ -91,9 +95,17 @@ NSString *const kNativeAdDefaultActionViewKey = @"kNativeAdDefaultActionButtonKe
     nativeVideoAdSettings.viewSizeHandler = ^(CGFloat maximumWidth) {
         return CGSizeMake(maximumWidth, 312.0f);
     };
-    MPNativeAdRendererConfiguration *nativeVideoConfig = [MOPUBNativeVideoAdRenderer rendererConfigurationWithRendererSettings:nativeVideoAdSettings];
 
-    MPNativeAdRequest *adRequest1 = [MPNativeAdRequest requestWithAdUnitIdentifier:self.info.ID rendererConfigurations:@[config, nativeVideoConfig]];
+    MPNativeAdRendererConfiguration *nativeVideoConfig = [MOPUBNativeVideoAdRenderer rendererConfigurationWithRendererSettings:nativeVideoAdSettings];
+    [configurations addObject:nativeVideoConfig];
+
+    #ifdef CUSTOM_EVENTS_ENABLED
+    MPNativeAdRendererConfiguration * flurryConfig = [FlurryNativeVideoAdRenderer rendererConfigurationWithRendererSettings:nativeVideoAdSettings];
+    MPNativeAdRendererConfiguration *admobConfig = [MPGoogleAdMobNativeRenderer rendererConfigurationWithRendererSettings:settings];
+    [configurations addObjectsFromArray:@[admobConfig, flurryConfig]];
+    #endif
+
+    MPNativeAdRequest *adRequest1 = [MPNativeAdRequest requestWithAdUnitIdentifier:self.info.ID rendererConfigurations:configurations];
     MPNativeAdRequestTargeting *targeting = [[MPNativeAdRequestTargeting alloc] init];
 
     targeting.keywords = self.keywordsTextField.text;
